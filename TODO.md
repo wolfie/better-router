@@ -1,0 +1,2 @@
+- make a build script (exclude `*.test.ts` files)
+- publish to NPM
