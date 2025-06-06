@@ -1,4 +1,4 @@
-import { describe, it } from "node:test";
+import { describe, it } from "vitest";
 import isEqualRecordOneLevel from "./isEqualRecordOneLevel.js";
 import assert from "node:assert";
 

@@ -13,7 +13,7 @@
     "dev": "./dev.sh",
     "build": "./build.sh",
     "lint": "eslint .",
-    "test": "pnpx tsx@latest --test --watch"
+    "test": "vitest"
   },
   "peerDependencies": {
     "next": "^13 || ^14 || ^15",
@@ -21,16 +21,24 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.28.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
     "@tsconfig/node22": "^22.0.2",
     "@types/node": "^22.15.29",
     "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.5.1",
     "eslint": "^9.28.0",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
+    "jsdom": "^26.1.0",
     "next": "15.3.2",
+    "next-router-mock": "^1.0.2",
     "react": "19.1.0",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.1"
+    "typescript-eslint": "^8.33.1",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.2.2"
   },
   "keywords": [
     "react",

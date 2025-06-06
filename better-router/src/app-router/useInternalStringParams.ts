@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation.js";
 import isEqualArrayOneLevel from "../lib/isEqualArrayOneLevel.js";
 import type Result from "../lib/Result.js";
+import arrayify from "../lib/arrayify.js";
 
 type OnChangeHandle = () => void;
 const SHARED_STATE_LISTENERS = new Set<OnChangeHandle>();
@@ -13,8 +14,8 @@ export type InternalHookResult = Result<string[] | undefined>;
 
 const useInternalStringParams = (
   key: string,
-  defaultValue?: string[] // TODO decide if this should be string[]|string, to avoid calling `arrayify` everywhere
-): Result<string[] | undefined> => {
+  defaultValue?: string | string[]
+): Result<string[]> => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -52,13 +53,19 @@ const useInternalStringParams = (
     };
   }, []);
 
-  const value = searchParams.getAll(key) ?? defaultValue;
+  const initialValue = searchParams.getAll(key);
+  const value = React.useMemo(
+    () =>
+      initialValue.length > 0 ? initialValue : arrayify(defaultValue) ?? [],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [defaultValue, JSON.stringify(initialValue)]
+  );
 
   const setValue = useCallback(
     (v: string[] | undefined) => {
       QUERY_DIFF_QUEUE.push([
         key,
-        v && !isEqualArrayOneLevel(v, defaultValue) ? v : undefined,
+        v && !isEqualArrayOneLevel(v, arrayify(defaultValue)) ? v : undefined,
       ]);
       SHARED_STATE_LISTENERS.forEach((rerender) => rerender());
     },
