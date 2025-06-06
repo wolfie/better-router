@@ -11,32 +11,23 @@ const QUERY_DIFF_QUEUE: Array<[key: string, value: string[] | undefined]> = [];
 const useInternalStringParams = (
   key: string,
   defaultValue?: string | string[]
-): Result<string[] | undefined> => {
+): Result<string[]> => {
   const router = useRouter();
-  // https://nextjs.org/docs/messages/react-hydration-error#solution-1-using-useeffect-to-run-on-the-client-only
-  const [isClient, setIsClient] = useState(false);
+
   const [rerenderTrigger, setRerenderTrigger] = useState(Symbol());
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
+    if (QUERY_DIFF_QUEUE.length === 0) return;
 
-  useEffect(
-    () => {
-      if (QUERY_DIFF_QUEUE.length === 0) return;
+    const query = { ...router.query };
+    QUERY_DIFF_QUEUE.forEach(([key, value]) => {
+      if (typeof value === "undefined") delete query[key];
+      else query[key] = value;
+    });
+    QUERY_DIFF_QUEUE.splice(0, QUERY_DIFF_QUEUE.length);
 
-      const query = { ...router.query };
-      QUERY_DIFF_QUEUE.forEach(([key, value]) => {
-        if (typeof value === "undefined") delete query[key];
-        else query[key] = value;
-      });
-      QUERY_DIFF_QUEUE.splice(0, QUERY_DIFF_QUEUE.length);
-
-      router.push({ pathname: router.pathname, query });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- ignore router dependency
-    [rerenderTrigger]
-  );
+    router.push({ pathname: router.pathname, query });
+  }, [rerenderTrigger, router]);
 
   useEffect(() => {
     const triggerRerender: OnChangeHandle = () => setRerenderTrigger(Symbol());
@@ -46,14 +37,11 @@ const useInternalStringParams = (
     };
   }, []);
 
-  const search = new URLSearchParams(
-    isClient ? globalThis?.location?.search ?? "" : ""
-  );
-  const values = search.has(key) ? search.getAll(key) : arrayify(defaultValue);
+  const rawValue = router.query[key];
   const value = useMemo(
-    () => values,
+    () => arrayify(router.query[key]) ?? arrayify(defaultValue) ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [JSON.stringify(values)]
+    [defaultValue, JSON.stringify(rawValue)]
   );
 
   const setValue = useCallback(
