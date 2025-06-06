@@ -1,4 +1,4 @@
-import { memoryRouter as mockRouter } from "next-router-mock";
+import { memoryRouter } from "next-router-mock";
 import { describe, vi } from "vitest";
 import useInternalStringParams from "./useInternalStringParams.js";
 import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime.js";
@@ -18,9 +18,9 @@ vi.mock("next/router", async (importOriginal) => {
 
 const wrapper = (props: React.PropsWithChildren) => (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  <RouterContext.Provider value={mockRouter as any} {...props} />
+  <RouterContext value={memoryRouter as any} {...props} />
 );
 
 describe("pages-router/useInternalStringParams", () => {
-  runSharedTests(mockRouter, wrapper, useInternalStringParams);
+  runSharedTests(memoryRouter, wrapper, useInternalStringParams);
 });

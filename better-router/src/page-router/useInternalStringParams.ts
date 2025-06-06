@@ -46,10 +46,11 @@ const useInternalStringParams = (
 
   const setValue = useCallback(
     (v: string[] | undefined) => {
-      QUERY_DIFF_QUEUE.push([
-        key,
-        v && !isEqualArrayOneLevel(v, arrayify(defaultValue)) ? v : undefined,
-      ]);
+      const newValue =
+        v && !isEqualArrayOneLevel(v, arrayify(defaultValue)) && v.length !== 0
+          ? v
+          : undefined;
+      QUERY_DIFF_QUEUE.push([key, newValue]);
       SHARED_STATE_LISTENERS.forEach((triggerRendered) => triggerRendered());
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

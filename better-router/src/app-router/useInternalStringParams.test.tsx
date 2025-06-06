@@ -1,4 +1,4 @@
-import { memoryRouter as mockRouter } from "next-router-mock";
+import { memoryRouter } from "next-router-mock";
 import { describe, vi } from "vitest";
 import useInternalStringParams from "./useInternalStringParams.js";
 import { AppRouterContext } from "next/dist/shared/lib/app-router-context.shared-runtime.js";
@@ -12,10 +12,10 @@ vi.mock("next/navigation", async (importOriginal) => {
     typeof import("next-router-mock")
   >("next-router-mock");
   const usePathname = vi.fn().mockImplementation(() => {
-    return mockRouter.pathname;
+    return memoryRouter.pathname;
   });
   const useSearchParams = vi.fn().mockImplementation(() => {
-    const query = mockRouter.query as Record<string, string | string[]>;
+    const query = memoryRouter.query as Record<string, string | string[]>;
     const params = new URLSearchParams();
     Object.entries(query).forEach(([key, value]) => {
       if (Array.isArray(value)) {
@@ -36,9 +36,9 @@ vi.mock("next/navigation", async (importOriginal) => {
 
 const wrapper = (props: React.PropsWithChildren) => (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  <AppRouterContext value={mockRouter as any} {...props} />
+  <AppRouterContext value={memoryRouter as any} {...props} />
 );
 
 describe("app-router/useInternalStringParams", () => {
-  runSharedTests(mockRouter, wrapper, useInternalStringParams);
+  runSharedTests(memoryRouter, wrapper, useInternalStringParams);
 });
