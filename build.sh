@@ -3,6 +3,5 @@
 rm -rf dist/*
 mkdir -p dist
 ./create-package-dist-json.js
-cp ../README.md dist
-cp ../LICENSE dist
+cp ./README.md ./LICENSE dist
 tsc -p tsconfig.build.json

@@ -10,7 +10,6 @@
     "directory": "/better-router"
   },
   "scripts": {
-    "dev": "./dev.sh",
     "build": "./build.sh",
     "lint": "eslint .",
     "test": "vitest"
