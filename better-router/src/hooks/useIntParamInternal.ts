@@ -9,14 +9,18 @@ const useIntParamInternal = (
 ) => {
   const [val, setVal] = hook;
   const strValue = val?.at(0);
-  let value = strValue ? parseInt(strValue, 10) : undefined;
-  value =
-    typeof value !== "undefined" && isFinite(value) ? value : defaultValue;
 
-  return useMemo<Result<number | undefined>>(
-    () => [value, (value) => setVal(arrayify(value?.toString()))],
-    [value, setVal]
-  );
+  return useMemo<Result<number | undefined>>(() => {
+    const value =
+      strValue && /^-?[\d]+$/.test(strValue)
+        ? parseInt(strValue, 10)
+        : defaultValue;
+
+    const setValue = (value: number | undefined) =>
+      setVal(arrayify(value?.toString()));
+
+    return [value, setValue];
+  }, [strValue, defaultValue, setVal]);
 };
 
 export default useIntParamInternal;
