@@ -113,6 +113,20 @@ If the matching parameter does not encode into a valid `Date` object, `undefined
 
 Note: `useDateParam` does not accept a default value.
 
+### useEnumParam
+
+_since v1.1.0_
+
+<!-- prettier-ignore -->
+```typescript
+function useEnumParam<const T extends EnumType>(key: string, values: T): Result<EnumValueType<T> | undefined>;
+function useEnumParam<const T extends EnumType>(key: string, values: T, defaultValue: NoInfer<EnumValueType<T>>): Result<EnumValueType<T>>;
+```
+
+If the matching parameter is not a valid value in the given enum, `defaultValue` (or `undefined`) is returned instead.
+
+For string union use cases, you might want to use `useStringUnionParam` instead.
+
 ### useIntParam
 
 _since v1.0.0_
@@ -167,3 +181,5 @@ function useStringUnionParam<T extends string>(key: string, values: T[], default
 ```
 
 If the matching parameter is not present in `values`, then `defaultValue` (or `undefined`) will be returned.
+
+If you have to use [enums](https://www.typescriptlang.org/docs/handbook/enums.html), `useEnumParam` is available for that use case.
