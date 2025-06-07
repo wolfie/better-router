@@ -63,4 +63,20 @@ describe("useIntParamInternal", () => {
     rerender();
     expect(result.current[0]).toBeUndefined();
   });
+
+  it("treats numbers through the setter strictly as integers, too", () => {
+    const { result, rerender } = renderHook(() => useIntParam("key"), {
+      wrapper,
+    });
+
+    result.current[1](NaN);
+    rerender();
+    expect(memoryRouter.asPath).toBe("/");
+    result.current[1](Infinity);
+    rerender();
+    expect(memoryRouter.asPath).toBe("/");
+    result.current[1](1.5);
+    rerender();
+    expect(memoryRouter.asPath).toBe("/");
+  });
 });

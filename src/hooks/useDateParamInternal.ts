@@ -6,6 +6,9 @@ type DateFormat = "yyyy" | "yyyy-MM" | "yyyy-MM-dd";
 type TimeFormat = "HH:mm" | "HH:mm:ss" | "HH:mm:ss.SSS";
 export type DateTimeFormat = `${DateFormat | `${DateFormat}T${TimeFormat}`}Z`;
 
+const isValidDate = (date?: Date): boolean =>
+  !!date && !Number.isNaN(date.getTime());
+
 const splitDateString = (
   str: string
 ): { year: number; month: number; day: number } => {
@@ -61,14 +64,14 @@ const parseStringToDate = (str: string | undefined): Date | undefined => {
   date.setUTCMinutes(minutes);
   date.setUTCSeconds(seconds);
   date.setUTCMilliseconds(millis);
-  return isNaN(date.getTime()) ? undefined : date;
+  return isValidDate(date) ? date : undefined;
 };
 
 const formatDateToString = (
   date: Date,
   format: DateTimeFormat
 ): string | undefined => {
-  if (Number.isNaN(date.getTime())) return undefined;
+  if (!isValidDate(date)) return undefined;
 
   return format
     .replace("yyyy", date.getUTCFullYear().toString())
@@ -90,7 +93,10 @@ const useDateParamInternal = (
   return useMemo<Result<Date | undefined>>(
     () => [
       parseStringToDate(strValue), // value ignores format (...for now)
-      (value) => setVal(arrayify(value && formatDateToString(value, format))),
+      (value) =>
+        isValidDate(value)
+          ? setVal(arrayify(value && formatDateToString(value, format)))
+          : undefined,
     ],
     [format, setVal, strValue]
   );
