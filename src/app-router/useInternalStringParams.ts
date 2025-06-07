@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation.js";
 import isEqualArrayOneLevel from "../lib/isEqualArrayOneLevel.js";
 import type Result from "../lib/Result.js";
@@ -54,7 +54,7 @@ const useInternalStringParams = (
   }, []);
 
   const initialValue = searchParams.getAll(key);
-  const value = React.useMemo(
+  const value = useMemo(
     () =>
       initialValue.length > 0 ? initialValue : arrayify(defaultValue) ?? [],
     // eslint-disable-next-line react-hooks/exhaustive-deps
