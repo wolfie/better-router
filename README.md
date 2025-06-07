@@ -85,6 +85,8 @@ Whenever the hooks deal with non-primitive values (e.g. `Date` or `string[]`), i
 
 ### useBooleanParam
 
+_since v1.0.0_
+
 <!-- prettier-ignore -->
 ```typescript
 function useBooleanParam(key: string): Result<boolean | undefined>;
@@ -94,6 +96,8 @@ function useBooleanParam(key: string, defaultValue: boolean): Result<boolean>;
 Only the literal string values `"true"` and `"false"` (without quotes) are recognized as valid values. If the matching parameter is not one of those, `defaultValue` (or `undefined`) will be returned.
 
 ### useDateParam
+
+_since v1.0.0_
 
 <!-- prettier-ignore -->
 ```typescript
@@ -111,14 +115,30 @@ Note: `useDateParam` does not accept a default value.
 
 ### useIntParam
 
+_since v1.0.0_
+
 ```typescript
 function useIntParam(key: string): Result<number | undefined>;
 function useIntParam(key: string, defaultValue: number): Result<number>;
 ```
 
-If the matching parameter is not a valid base-10 integer, `defaultValue` (or `undefined`) will be returned.
+If the matching parameter is not a valid base-10 integer, `defaultValue` (or `undefined`) will be returned. If you need support for "any number", see `useNumberParam`.
+
+### useNumberParam
+
+_since v1.1.0_
+
+<!-- prettier-ignore -->
+```typescript
+function useNumberParam(key: string): Result<number | undefined>;
+function useNumberParam(key: string, defaultValue: number): Result<number>;
+```
+
+A more lenient version of `useIntParam`. The parameter is parsed with [`parseFloat`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseFloat), so the rules of what is valid will follow from there.
 
 ### useStringArrayParam
+
+_since v1.0.0_
 
 <!-- prettier-ignore -->
 ```typescript
@@ -128,6 +148,8 @@ function useStringArrayParam(key: string, defaultValue: string[]): Result<string
 
 ### useStringParam
 
+_since v1.0.0_
+
 <!-- prettier-ignore -->
 ```typescript
 function useStringParam(key: string): Result<string | undefined>;
@@ -135,6 +157,8 @@ function useStringParam(key: string, defaultValue: string): Result<string>;
 ```
 
 ### useStringUnionParam
+
+_since v1.0.0_
 
 <!-- prettier-ignore -->
 ```typescript

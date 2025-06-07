@@ -3,6 +3,7 @@ import useDateParamInternal, {
   type DateTimeFormat,
 } from "../hooks/useDateParamInternal.js";
 import useIntParamInternal from "../hooks/useIntParamInternal.js";
+import useNumberParamInternal from "../hooks/useNumberParamInternal.js";
 import useStringArrayParamInternal from "../hooks/useStringArrayParamInternal.js";
 import useStringParamInternal from "../hooks/useStringParamInternal.js";
 import useStringUnionParamInternal from "../hooks/useStringUnionParamInternal.js";
@@ -10,6 +11,7 @@ import arrayify from "../lib/arrayify.js";
 import type Result from "../lib/Result.js";
 import useInternalStringParams from "./useInternalStringParams.js";
 
+/** @since v1.0.0 */
 export function useBooleanParam(key: string): Result<boolean | undefined>;
 export function useBooleanParam(
   key: string,
@@ -23,6 +25,7 @@ export function useBooleanParam(
   return useBooleanParamInternal(hook, defaultValue);
 }
 
+/** @since v1.0.0 */
 export function useDateParam(
   key: string,
   format?: DateTimeFormat
@@ -30,6 +33,8 @@ export function useDateParam(
   const hook = useInternalStringParams(key, undefined);
   return useDateParamInternal(hook, format);
 }
+
+/** @since v1.0.0 */
 export function useIntParam(key: string): Result<number | undefined>;
 export function useIntParam(key: string, defaultValue: number): Result<number>;
 export function useIntParam(
@@ -40,6 +45,21 @@ export function useIntParam(
   return useIntParamInternal(hook, defaultValue);
 }
 
+/** @since v1.1.0 */
+export function useNumberParam(key: string): Result<number | undefined>;
+export function useNumberParam(
+  key: string,
+  defaultValue: number
+): Result<number>;
+export function useNumberParam(
+  key: string,
+  defaultValue?: number
+): Result<number | undefined> {
+  const hook = useInternalStringParams(key, arrayify(defaultValue?.toString()));
+  return useNumberParamInternal(hook, defaultValue);
+}
+
+/** @since v1.0.0 */
 export function useStringArrayParam(key: string): Result<string[] | undefined>;
 export function useStringArrayParam(
   key: string,
@@ -53,6 +73,7 @@ export function useStringArrayParam(
   return useStringArrayParamInternal(hook);
 }
 
+/** @since v1.0.0 */
 export function useStringParam(key: string): Result<string | undefined>;
 export function useStringParam(
   key: string,
@@ -66,6 +87,7 @@ export function useStringParam(
   return useStringParamInternal(stringsHook);
 }
 
+/** @since v1.0.0 */
 export function useStringUnionParam<const T extends string>(
   key: string,
   values: T[]
@@ -88,6 +110,7 @@ export default {
   useBooleanParam,
   useDateParam,
   useIntParam,
+  useNumberParam,
   useStringArrayParam,
   useStringParam,
   useStringUnionParam,

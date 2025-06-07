@@ -1,3 +1,8 @@
+# v1.1.0
+
+- `useDateParam` and `useIntParam` is now stricter on what it will encode into the URL
+- Added `useNumberParam`
+
 # v1.0.2
 
 - Converted testing to `vitest`
